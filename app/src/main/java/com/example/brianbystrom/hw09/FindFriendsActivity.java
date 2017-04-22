@@ -43,15 +43,18 @@ public class FindFriendsActivity extends AppCompatActivity {
     private DatabaseReference loggedUserRef;
     private FirebaseUser user;
     private CustomArrayAdapter customArrayAdapter;
-    char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVEWXYZ".toCharArray();
+    char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVEWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
     ArrayList<User> allUsers;
+    private String myname;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_friends);
         find_friends = (ListView) findViewById(R.id.findFriends);
         mAuth = FirebaseAuth.getInstance();
-
+        if(getIntent().getExtras()!=null){
+         myname = getIntent().getStringExtra("MYNAME");
+        }
         database = FirebaseDatabase.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -76,13 +79,13 @@ public class FindFriendsActivity extends AppCompatActivity {
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
-                            Log.d("maskd ",snapshot.child("all").getChildrenCount()+"");
                             allUsers.clear();
                             customArrayAdapter.notifyDataSetChanged();
-                                for(int x = 0; x < 26; x++){
-                                    Log.d("test "+alphabet[x],snapshot.child("all").child(alphabet[x]+"").getValue()+"");
-                                    if(snapshot.child("all").child(alphabet[x]+"").exists()) {
+                                for(int x = 0; x < alphabet.length; x++){
+                                    //Log.d("test ",alphabet.length+"");
+                                    Log.d("test ","if "+snapshot.child("all").child(alphabet[x]+"").getKey() +" doesnt equal "+myname.charAt(0)+"");
 
+                                    if(snapshot.child("all").child(alphabet[x]+"").exists() && !snapshot.child("all").child(alphabet[x]+"").getKey().equals(myname.charAt(0)+"")) {
                                         User u = new User();
                                         u.setfName(snapshot.child("users").child(snapshot.child("all").child(alphabet[x]+"").getValue()+"").child("fName").getValue(String.class));
                                         u.setlName(snapshot.child("users").child(snapshot.child("all").child(alphabet[x]+"").getValue()+"").child("lName").getValue(String.class));

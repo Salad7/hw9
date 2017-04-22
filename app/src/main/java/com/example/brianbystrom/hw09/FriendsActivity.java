@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,6 +48,7 @@ public class FriendsActivity extends AppCompatActivity {
     private UserAdapter myAdapter;
     private ArrayList<User> myFriends;
     private TextView friendsCount;
+    private String MYNAME;
     //private Friend newFriend = new Friend();
 
     @Override
@@ -76,6 +78,7 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(FriendsActivity.this,FindFriendsActivity.class);
+                i.putExtra("MYNAME",MYNAME);
                 startActivity(i);
             }
         });
@@ -91,28 +94,31 @@ public class FriendsActivity extends AppCompatActivity {
 
 
                     //myRef.child("friends").orderByChild("user").equalTo(user.getUid());
-                    myRef.child("users");
+                    //myRef.child("users");
                     Log.d("USER ID", user.getUid() + "");
-                    myFriends.clear();
+
                     //Even though the Log has a reference to a friend object, i can't seem to pull information from it like I was when
                     //Pulling the user in the EditProfileActivity
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             Log.d("mask ",snapshot.child(uid).child("friends").getChildrenCount()+"");
+                            friendsCount.setText("Found "+((int)snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()-1)+" friends");
+                            MYNAME = snapshot.child("users").child(uid).child("fName").getValue(String.class);
                             if(Integer.parseInt(snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()+"") > 0) {
-                                setAdapter(friendData);
+                               // setAdapter(friendData);
                             }
-
+                            myFriends.clear();
                             for(int i = 0; i < 100; i++){
-                                if(snapshot.child("users").child(user.getUid()).child("friendsUID").child(i+"").exists()){
+                                if(snapshot.child("users").child(user.getUid()).child("friendsUID").child(i+"").exists() && !snapshot.child("users").child(user.getUid()).child("friendsUID").child(i+"").getValue(String.class).equals(user.getUid())){
                                     Log.d("do i have friends","yes");
                                     User u = new User();
                                     String friendsUid = snapshot.child("users").child(user.getUid()).child("friendsUID").child(i+"").getValue(String.class);
                                     u.setProfileURL(snapshot.child("users").child(friendsUid).child("profileURL").child(i+"").getValue(String.class));
-                                    u.setfName(snapshot.child("users").child(friendsUid).child("fName").child(i+"").getValue(String.class));
-                                    u.setlName(snapshot.child("users").child(friendsUid).child("lName").child(i+"").getValue(String.class));
-                                    u.setGender(snapshot.child("users").child(friendsUid).child("gender").child(i+"").getValue(String.class));
+                                    u.setfName(snapshot.child("users").child(friendsUid).child("fName").getValue(String.class));
+                                    u.setlName(snapshot.child("users").child(friendsUid).child("lName").getValue(String.class));
+                                    u.setGender(snapshot.child("users").child(friendsUid).child("gender").getValue(String.class));
+                                    //Log.d("800",snapshot.child("users").child(friendsUid).child("fName").getValue(String.class)+"");
                                     myFriends.add(u);
                                 }
                                 updateList();
@@ -137,18 +143,26 @@ public class FriendsActivity extends AppCompatActivity {
     }
     public void updateList(){
         myAdapter.notifyDataSetChanged();
+        myAdapter.setNotifyOnChange(true);
     }
     public void removeFriend(char l){
         final char letter = l;
-        final DatabaseReference temp = database.getReference("all");//.child(user.getUid());
+        final DatabaseReference temp = database.getReference();//.child(user.getUid());
         temp.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //Toast.makeText(getApplicationContext(),dataSnapshot.child("all").child(letter+"")+"",Toast.LENGTH_LONG).show();
+
                 if(dataSnapshot.child("all").child(letter+"").exists()){
                     String uidToRemove;
+                    //Toast.makeText(getApplicationContext(),"close2",Toast.LENGTH_LONG).show();
+
                     uidToRemove = dataSnapshot.child("all").child(letter+"").getValue(String.class);
                     for(int i = 0; i < 100; i++){
-                        if(uidToRemove.equals(dataSnapshot.child("users").child(user.getUid()).child("friendsUID").child(i+""))){
+                        Log.d("800","if " + uidToRemove + " equals " + dataSnapshot.child("users").child(user.getUid()).child("friendsUID").child(i+""));
+                        if(uidToRemove.equals(dataSnapshot.child("users").child(user.getUid()).child("friendsUID").child(i+"").getValue(String.class))){
+                            //Toast.makeText(getApplicationContext(),"close",Toast.LENGTH_LONG).show();
+
                             temp.child("users").child(user.getUid()).child("friendsUID").child(i+"").removeValue();
                         }
                     }
@@ -174,16 +188,6 @@ public class FriendsActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-    }
-
-    public void setAdapter(ArrayList<User> f) {
-        Log.d("SIZE", friendData.size() + "");
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        MyAdapter mAdapter = new MyAdapter(f, FriendsActivity.this);
-        mAdapter.notifyDataSetChanged();
-        friendRV.setAdapter(mAdapter);
-        friendRV.setLayoutManager(mLayoutManager);
-        friendRV.setHasFixedSize(true);
     }
 
     public class UserAdapter extends ArrayAdapter<User> {
@@ -225,6 +229,7 @@ public class FriendsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     ((FriendsActivity) ctx).removeFriend(textUserName.getText().charAt(0));
+                    //Toast.makeText(ctx,"delete",Toast.LENGTH_LONG).show();
                 }
             });
 

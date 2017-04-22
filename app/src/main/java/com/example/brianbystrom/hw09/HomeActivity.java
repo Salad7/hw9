@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             for (com.google.firebase.database.DataSnapshot s: snapshot.getChildren()) {
-                                Log.d("demo", snapshot.getValue(User.class).toString());
+//                                Log.d("demo", snapshot.getValue(User.class).toString());
                                 Log.d(TAG, snapshot.getValue(User.class).getfName());
                                 currentUser.setfName(snapshot.getValue(User.class).getfName().toString());
                                 currentUser.setlName(snapshot.getValue(User.class).getlName().toString());
