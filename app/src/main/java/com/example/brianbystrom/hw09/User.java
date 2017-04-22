@@ -1,5 +1,9 @@
 package com.example.brianbystrom.hw09;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * Created by brianbystrom on 4/18/17.
  */
@@ -7,16 +11,26 @@ package com.example.brianbystrom.hw09;
 public class User {
 
     String fName, lName, gender, profileURL;
+    ArrayList<String> friendsUID;
 
     
 
-    public User(String fName, String lName, String gender, String profileURL) {
+    public User(String fName, String lName, String gender, String profileURL, ArrayList<String> f) {
         this.fName = fName;
         this.lName = lName;
         this.gender = gender;
         this.profileURL = profileURL;
+        this.friendsUID = f;
     }
-    
+
+    public ArrayList<String> getFriendsUID() {
+        return friendsUID;
+    }
+
+    public void setFriendsUID(ArrayList<String> friendsUID) {
+        this.friendsUID = friendsUID;
+    }
+
     public User() {
         
     }

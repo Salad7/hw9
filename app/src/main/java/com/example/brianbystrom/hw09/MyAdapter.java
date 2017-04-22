@@ -1,5 +1,6 @@
 package com.example.brianbystrom.hw09;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -20,20 +21,16 @@ import java.util.ArrayList;
 
 
 
-/* Group 02 - Lakshmi Sridhar, Swetha Adla
-   Homework 07
-   MyAdapter.java
- */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    public FriendsActivity activity;
+    public Context c;
 
-    private ArrayList<Friend> mDataset = new ArrayList<Friend>();
+    private ArrayList<User> mDataset = new ArrayList<User>();
 
 
-    public MyAdapter(ArrayList<Friend> mDataset, FriendsActivity activity) {
+    public MyAdapter(ArrayList<User> mDataset, Context activity) {
         this.mDataset = mDataset;
-        this.activity = activity;
+        this.c = activity;
 
     }
 
@@ -63,14 +60,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Friend friend = mDataset.get(position);
+        final User friend = mDataset.get(position);
 
         TextView tv = holder.nameTV;
-        tv.setText(friend.getUser() + " " + friend.getUser());
+        tv.setText(friend.getfName() + " " + friend.getlName());
 
         ImageView iv = holder.profileUrlIV;
-
-        //Picasso.with(activity).load(friend.getUser()).into(iv);
 
     }
 

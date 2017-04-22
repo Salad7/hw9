@@ -124,7 +124,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 if(fName.equals("") || lName.equals("") || gender.equals("") || profileURL.equals("")) {
                     Toast.makeText(EditProfileActivity.this, "Please make sure each field is filled out.", Toast.LENGTH_SHORT).show();
                 } else {
-                    User userSave = new User(fName, lName, gender, profileURL);
+                    User userSave = new User(fName, lName, gender, profileURL, null);
                     myRef = database.getReference("users").child(user.getUid());
                     myRef.setValue(userSave);
 

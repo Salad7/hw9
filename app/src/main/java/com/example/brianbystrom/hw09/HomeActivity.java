@@ -1,15 +1,22 @@
 package com.example.brianbystrom.hw09;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -35,27 +45,26 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     private FirebaseUser user;
     private User currentUser = new User();
+    private String uid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         welcomeTV = (TextView) findViewById(R.id.welcomeTV);
-
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    uid = user.getUid();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     welcomeTV.setText("Welcome back " + user.getDisplayName());
                     myRef = database.getReference("users").child(user.getUid());
-
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -67,16 +76,17 @@ public class HomeActivity extends AppCompatActivity {
                                 currentUser.setGender(snapshot.getValue(User.class).getGender().toString());
                                 currentUser.setProfileURL(snapshot.getValue(User.class).getProfileURL().toString());
                                 welcomeTV.setText("Welcome back " + user.getDisplayName());
-
-
                             }
+
+
+
+
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
                         }
-
                     });
                 } else {
                     // User is signed out
@@ -90,6 +100,10 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -98,7 +112,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, EditProfileActivity.class));
                 return true;
             case R.id.friendsMI:
-                startActivity(new Intent(HomeActivity.this, FriendsActivity.class));
+                Intent i = new Intent(HomeActivity.this, FriendsActivity.class);
+                i.putExtra("UID",uid);
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -124,4 +140,5 @@ public class HomeActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
 }
