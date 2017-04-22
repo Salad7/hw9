@@ -103,7 +103,13 @@ public class FriendsActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             Log.d("mask ",snapshot.child(uid).child("friends").getChildrenCount()+"");
-                            friendsCount.setText("Found "+((int)snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()-1)+" friends");
+                            if((int)snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()-1 < 0){
+                                friendsCount.setText("Found "+0+" friends");
+
+                            }
+                            else {
+                                friendsCount.setText("Found " + ((int) snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()) + " friends");
+                            }
                             MYNAME = snapshot.child("users").child(uid).child("fName").getValue(String.class);
                             if(Integer.parseInt(snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()+"") > 0) {
                                // setAdapter(friendData);
@@ -139,7 +145,12 @@ public class FriendsActivity extends AppCompatActivity {
             }
         };
 
-
+    cancelBtn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            finish();
+        }
+    });
     }
     public void updateList(){
         myAdapter.notifyDataSetChanged();
@@ -223,7 +234,7 @@ public class FriendsActivity extends AppCompatActivity {
             profileIMG = (ImageView) convertView.findViewById(R.id.profileUrlIV);
             removeBtn = (Button) convertView.findViewById(R.id.addBtn);
             textUserName.setText(users.get(position).getfName() + " " + users.get(position).getlName());
-            profileIMG.setImageResource(R.mipmap.default_prof);
+            profileIMG.setImageResource(R.drawable.norm);
             removeBtn.setText("Delete");
             removeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

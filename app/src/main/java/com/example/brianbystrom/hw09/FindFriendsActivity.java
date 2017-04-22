@@ -72,7 +72,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                     //myRef.child("friends").orderByChild("user").equalTo(user.getUid());
                     //myRef.child("all");
                     Log.d("USER ID", user.getUid() + "");
-                    customArrayAdapter = new CustomArrayAdapter(allUsers,getApplicationContext(),database,user.getUid());
+                    customArrayAdapter = new CustomArrayAdapter(allUsers,getApplication(),database,user.getUid());
                     find_friends.setAdapter(customArrayAdapter);
                     //Even though the Log has a reference to a friend object, i can't seem to pull information from it like I was when
                     //Pulling the user in the EditProfileActivity
@@ -124,6 +124,10 @@ public class FindFriendsActivity extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthListener);
     }
 
+    public void end(){
+        finish();
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -173,7 +177,7 @@ String id;
                             Log.d("zone",dataSnapshot.child("users").child(id).child("friendsUID").getChildrenCount()+"");
                             temp.add(dataSnapshot.child("all").child(mDataset.get(position).getfName().charAt(0)+"").getValue(String.class));
                             l.getReference().child("users").child(id).child("friendsUID").setValue(temp);
-
+//                            ((FindFriendsActivity) c).end();
                         }
 
                         @Override
@@ -183,8 +187,10 @@ String id;
                     });
 
                 }
+
             });
             img = (ImageView) convertView.findViewById(R.id.profileUrlIV);
+            img.setImageResource(R.drawable.norm);
             name.setText(mDataset.get(position).getfName() +" " +mDataset.get(position).getlName());
             add.setText("Add");
             return convertView;

@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "DEMO2";
     private EditText fNameET, lNameET, emailET, passwordET, cPasswordET;
     private TextView welcomeTV;
-    private Button signUpBTN;
+    private Button editBTN;
     private String fName, lName, email, password, cPassword;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -55,6 +55,15 @@ public class HomeActivity extends AppCompatActivity {
         welcomeTV = (TextView) findViewById(R.id.welcomeTV);
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        editBTN =(Button) findViewById(R.id.edit_prof_btn);
+        editBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),EditProfileActivity.class);
+                i.putExtra("UID",user.getUid());
+                startActivity(i);
+            }
+        });
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -63,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
                     // User is signed in
                     uid = user.getUid();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    welcomeTV.setText("Welcome back " + user.getDisplayName());
+                    //welcomeTV.setText("Welcome back " + user.getDisplayName());
                     myRef = database.getReference("users").child(user.getUid());
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -75,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
                                 currentUser.setlName(snapshot.getValue(User.class).getlName().toString());
                                 currentUser.setGender(snapshot.getValue(User.class).getGender().toString());
                                 currentUser.setProfileURL(snapshot.getValue(User.class).getProfileURL().toString());
-                                welcomeTV.setText("Welcome back " + user.getDisplayName());
+                                welcomeTV.setText("Welcome back " + currentUser.getfName() + " " + currentUser.getlName());
                             }
 
 
