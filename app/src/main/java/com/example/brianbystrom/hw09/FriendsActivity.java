@@ -48,6 +48,7 @@ public class FriendsActivity extends AppCompatActivity {
     private UserAdapter myAdapter;
     private ArrayList<User> myFriends;
     private TextView friendsCount;
+    private int nFriends;
     private String MYNAME;
     //private Friend newFriend = new Friend();
 
@@ -65,6 +66,7 @@ public class FriendsActivity extends AppCompatActivity {
         friendsCount = (TextView) findViewById(R.id.freindsCount);
         myAdapter = new UserAdapter(this,R.layout.friend,myFriends);
         friends.setAdapter(myAdapter);
+        friendsCount.setText("You have "+nFriends+"friends");
         /*Friend friend = new Friend("JR8XB36F07dAuqTp2XL98vXkYOn1", "JR8XB36F07dAuqTp2XL98vXkYOn1");
 
         DatabaseReference ref = database.getReference("friends");
@@ -102,14 +104,7 @@ public class FriendsActivity extends AppCompatActivity {
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
-                            Log.d("mask ",snapshot.child(uid).child("friends").getChildrenCount()+"");
-                            if((int)snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()-1 < 0){
-                                friendsCount.setText("Found "+0+" friends");
 
-                            }
-                            else {
-                                friendsCount.setText("Found " + ((int) snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()) + " friends");
-                            }
                             MYNAME = snapshot.child("users").child(uid).child("fName").getValue(String.class);
                             if(Integer.parseInt(snapshot.child("users").child(uid).child("friendsUID").getChildrenCount()+"") > 0) {
                                // setAdapter(friendData);
@@ -126,6 +121,8 @@ public class FriendsActivity extends AppCompatActivity {
                                     u.setGender(snapshot.child("users").child(friendsUid).child("gender").getValue(String.class));
                                     //Log.d("800",snapshot.child("users").child(friendsUid).child("fName").getValue(String.class)+"");
                                     myFriends.add(u);
+                                    nFriends++;
+                                    friendsCount.setText("You have "+nFriends+"friends");
                                 }
                                 updateList();
                             }
