@@ -25,7 +25,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="518e124b8609aa0e21f1db904f1937f8ec73b228">
+        sha1="5a2f71673ddb86c82649a1cff416c8fe25a7d615">
         <dex dex="C:\Users\msalad\Desktop\HW9\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_d00e3b51a03496e8e4dc6bc71acf3cb565840aff\classes.dex" />
     </item>
     <item
@@ -88,7 +88,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="8393563dec7cb512c0d9c68c4fbc8f9736f1c22b">
+        sha1="a83265ab3d6983dec081e5b834a86d6fe8cdf923">
         <dex dex="C:\Users\msalad\Desktop\HW9\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_646ea2956c2700d685ea79f1b8b7b3579d59c97d\classes.dex" />
     </item>
     <item
@@ -108,6 +108,15 @@
         revision="25.0.2"
         sha1="2a7ffe939ffd830b5d4052f3c1c4c235923790ce">
         <dex dex="C:\Users\msalad\Desktop\HW9\hw9\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-database-connection-10.2.1_9cb3099abe3c6a0946f1e2ba07ca838617d21dc3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\msalad\.gradle\caches\modules-2\files-2.1\org.ocpsoft.prettytime\prettytime\4.0.1.Final\5537d74e2102a82fd937dd9b8a652e3b26026a7a\prettytime-4.0.1.Final.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5537d74e2102a82fd937dd9b8a652e3b26026a7a">
+        <dex dex="C:\Users\msalad\Desktop\HW9\app\build\intermediates\transforms\dex\debug\folders\1000\10\prettytime-4.0.1.Final_068dbcd75484984f90ce6ea1089ea05a39c2430d\classes.dex" />
     </item>
     <item
         is-multidex="true"
